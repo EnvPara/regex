@@ -34,14 +34,22 @@ void DFA::InsertNode()
 //转为后缀表达式
 void DFA::RegextoPost()
 {
+	bool Crave = false;//左括号是否已经压栈
 	stack<char > PostStack;
 	int len = Regex.length();
 	int i = len;
 	while (len--)
 	{
 		if (Regex[i] == '(')
+		{
 			PostStack.push(Regex[i]);
+			i++;
+			Crave = true;
+		}
+		else if (Regex[i] == ')')
+		{
 
+		}
 	}
 
 }
