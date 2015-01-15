@@ -5,9 +5,11 @@ using namespace std;
 class DFA
 {
 public:
-	string Regex;
+	char *Regex;
+	char *RegexPost;
 	void InputRegex();
 	void InsertNode();
 	void RegextoPost();
+	int Precedence(char symbol);
 };
 #endif

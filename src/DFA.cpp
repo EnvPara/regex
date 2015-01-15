@@ -72,7 +72,7 @@ int LinkStack<T>::Length()
 }
 //压栈
 template <class T>
-void LinkStack<T>::Push(T *&item)
+void LinkStack<T>::Push(const T &item)
 {
 	top = new StackNode<T>(item, top);
 }
@@ -129,7 +129,7 @@ void DFA::InputRegex()
 //加入连结点
 void DFA::InsertNode()
 {
-	int i = 0, bool_value, len = Regex.length();
+	int i = 0,j, len = strlen(Regex);
 	int length = len;
 	while (len--&&i<=length-1)
 	{
@@ -138,13 +138,87 @@ void DFA::InsertNode()
 			|| Regex[i] == '*')
 			&& (Regex[i + 1] != ')' && Regex[i + 1] != '.' && Regex[i + 1] != '|' && Regex[i + 1] != '*'))
 		{
-			Regex.insert(i+1,1, '.');
-			length++;
-			i++;
+			for (j = len; j>i + 1; j--)
+			{
+				Regex[j] = Regex[j - 1];
+			}
+			Regex[i + 1] = '.';
 			len++;
+			Regex[len] = '\0';
+			i++;
 		}
 		i++;
 	}
+	cout << "\n第一步: 加入连结点\n"
+		<< Regex << "\n"
+		<< "字符串长度: " << len
+		<< "\n\n------------------------" << endl;
 	cout << "\n第一步：加入连结点\n" << Regex << endl;
 	cout << "字符串长度：" <<length<<endl;
+}
+//判断运算符优先级
+int DFA::Precedence(char symbol)
+{
+	int priority;
+	switch (symbol)
+	{
+	case '|':priority = 1; break;
+	case '.':priority = 2; break;
+	case '*':priority = 3; break;
+	default:priority = 0; break;
+	}
+	return priority;
+}
+//将正则式转为逆波兰式
+void DFA::RegextoPost()
+{
+	int i = 0, j = 0;
+	char ch, cl;
+	strcpy(RegexPost, "\0");
+	LinkStack<char> *ls = new LinkStack<char>();
+	ls->Clear();
+	ls->Push('#');
+	ch = Regex[i];
+	while (ch != '\0')
+	{
+		if (ch == '(')
+		{
+			ls->Push(ch);
+			ch = Regex[++i];
+		}
+		else if (ch = ')')
+		{
+			while (ls->GetTop() != '(')
+				RegexPost[j++] = ls->Pop();
+			ls->Pop();
+			ch = Regex[++i];
+		}
+		else if ((ch == '|') || (ch = '*') || (ch == '.'))
+		{
+			cl = ls->GetTop();
+			while (Precedence(cl) >= Precedence(ch))
+			{
+				RegexPost[j++] = cl;
+				ls->Pop();
+				cl = ls->GetTop();
+			}
+			ls->Push(ch);
+			ch = Regex[++i];
+		}
+		else{
+			RegexPost[j++] = ch;
+			ch = Regex[++i];
+		}
+	}
+	ch = ls->Pop();
+	while ((ch == '|') || (ch == '*') || (ch == '.'))
+	{
+		RegexPost[j++] = ch;
+		ch = ls->Pop();
+	}
+	RegexPost[j] = '\0';
+	ls->Clear();
+	cout << "转为后缀式" << endl;
+	cout << RegexPost << endl;
+	cout << "字符串长度：" << strlen(RegexPost) << endl;
 }
