@@ -269,7 +269,7 @@ void DFA::GetEdgeNumber()
 		}
 		i++;
 	}
-	Edge[EdgeNumber] == '\0';
+	Edge[EdgeNumber] = '\0';
 	cout << "\n第三步: 获取字符集\n";
 	for (i = 0; i<EdgeNumber; i++)
 	{
@@ -290,6 +290,16 @@ void DFA::Thompson()
 	{
 		cout << "No Regex Expression Find" << endl;
 		exit(1);
+	}
+	NFATable->SetValue(0, 0);
+	i = 1; j = 0;
+	ch = RegexPost[i];
+	while (ch != '\0')
+	{
+		if (ch = '.')
+		{
+			s2 = States->Pop();
+		}
 	}
 	
 }

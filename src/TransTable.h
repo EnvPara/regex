@@ -11,6 +11,6 @@ public:
 	void clear();
 	int rowNumber;
 	int colNumber;
-	int **Matrix;
+	int **Matrix;//ถþฮฌสýื้
 };
 #endif
