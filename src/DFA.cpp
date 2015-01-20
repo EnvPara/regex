@@ -119,7 +119,30 @@ void LinkStack<T>::Clear()
 	}
 }
 /*
+		DFA
 */
+//DFA构造函数
+DFA::DFA()
+{
+	Regex = new char[128];
+	RegexPost = new char[128]; 
+	Edge = new char[128];
+	EdgeNumber = 0;
+	DFAStatesNumber = 0;
+	NFAStatesNumber = 0;
+	DtranNumber = 0;
+	NFATable = new AdjacentTable();
+}
+//DFA的析构函数
+DFA::~DFA()
+{
+	delete[] Regex;
+	delete[] RegexPost;
+	delete[] Edge;
+	delete[] AcceptStates;
+	NFATable->Clear();
+	DFATable->Clear();
+}
 //获取正则输入
 void DFA::InputRegex()
 {

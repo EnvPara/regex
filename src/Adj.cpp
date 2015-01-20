@@ -96,5 +96,89 @@ void AdjacentTable::SetValue(int value, int pos)
 //插入顶点
 void AdjacentTable::InsertVertex(int value)
 {
+	int pos = GetPosByValue(value);
+	if (pos >= 0 && pos < numOfVertexs)
+	{
+		cout << "illegal setting" << endl;
+		exit(1);
+	}
+	Vertex *p = StartVertex;
+	while (p->Next)
+		p = p->Next;
+	Vertex *newVertex = new Vertex(value);
+	p->Next = newVertex;
+	numOfVertexs++;
+}
 
+//按顶点位置插入边表
+void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
+{
+	if ((v1 < 0) || (v1 >= numOfVertexs) || (v2 < 0) || (v2 >= numOfVertexs))
+	{
+		cout << "Illegal insertion: The vertex doesn't exist!" << endl;
+		exit(1);
+	}
+	Vertex *p = StartVertex;
+	for (int i = 0; i < v1; i++)
+	{
+		p = p->Next;
+	}
+	Edge *q = p->Out;
+	Edge *newEdge = new Edge(GetValueByPos(v2), v2, weight);
+	if (!q)
+	{
+		p->Out = newEdge;
+		numOfEdge++;
+		return;
+	}
+	while (q->position!=v2&&q->Link)
+	{
+		q = q->Link;
+	}
+	if (q->position == v2)
+	{
+		cout << "Illegal insertion: The Edge has existed!" << endl;
+		exit(1);
+	}
+	if (!q->Link)
+	{
+		q->Link = newEdge;
+		numOfEdge++;
+	}
+}
+// 按顶点值插入边表
+void AdjacentTable::InsertEdgeByValue(int value1, int value2, char weight)
+{
+	int v1 = GetPosByValue(value1), v2 = GetPosByValue(value2);
+	InsertEdgeByPos(v1, v2, weight);
+}
+// 删除所有的边表
+void AdjacentTable::RemoveAllEdges(void)
+{
+	Vertex *p = StartVertex;
+	for (int i = 0; i<numOfVertexs; i++)
+	{
+		Edge *q = p->Out;
+		while (q)
+		{
+			p->Out = q->Link;
+			delete q;
+			q = p->Out;
+		}
+		p = p->Next;
+	}
+	numOfEdge = 0;
+}
+// 清空邻接表
+void AdjacentTable::Clear(void)
+{
+	RemoveAllEdges();
+	Vertex *p = StartVertex->Next;
+	while (p)
+	{
+		StartVertex->Next = p->Next;
+		delete p;
+		p = StartVertex->Next;
+	}
+	numOfVertexs = 1;
 }
