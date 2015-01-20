@@ -222,3 +222,51 @@ void DFA::RegextoPost()
 	cout << RegexPost << endl;
 	cout << "字符串长度：" << strlen(RegexPost) << endl;
 }
+//扫描逆波兰式中除运算符以外的字符的数目
+void DFA::GetEdgeNumber()
+{
+	int i = 0, j;
+	EdgeNumber = 0;
+	while (RegexPost[i] != '\0')
+	{
+		if (RegexPost[i] == '.' || RegexPost[i] == '|' || RegexPost[i] == '*')
+		{
+			i++;
+			continue;
+		}
+		for (j = 0; j < EdgeNumber; j++)
+		{
+			if (RegexPost[i] == Edge[j])
+				break;
+		}
+		if (j == EdgeNumber)
+		{
+			Edge[EdgeNumber] = RegexPost[i];
+			EdgeNumber++;
+		}
+		i++;
+	}
+	Edge[EdgeNumber] == '\0';
+	cout << "\n第三步: 获取字符集\n";
+	for (i = 0; i<EdgeNumber; i++)
+	{
+		cout << Edge[i] << ' ';
+	}
+	cout << "\n字符个数: " << EdgeNumber
+		<< "\n\n------------------------" << endl;
+}
+//用Thompson构造法构造NFA
+void DFA::Thompson()
+{ 
+	int i, j;
+	char ch;
+	int s1, s2;
+	LinkStack<int >*States = new LinkStack<int >();
+	States->Clear();
+	if (strlen(RegexPost) < 1)
+	{
+		cout << "No Regex Expression Find" << endl;
+		exit(1);
+	}
+	
+}

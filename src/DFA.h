@@ -11,5 +11,9 @@ public:
 	void InsertNode();
 	void RegextoPost();
 	int Precedence(char symbol);
+	void GetEdgeNumber();
+	void Thompson();//用Thompson构造法构造NFA
+	int EdgeNumber;
+	char *Edge;
 };
 #endif
