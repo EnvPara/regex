@@ -16,7 +16,7 @@ private:
 	StackNode<T> *next;
 	StackNode(T item = 0, StackNode<T> *p = NULL)
 	{
-		date = item;
+		data = item;
 		next = p;
 	}
 };
@@ -138,10 +138,10 @@ DFA::~DFA()
 {
 	delete[] Regex;
 	delete[] RegexPost;
-	delete[] Edge;
-	delete[] AcceptStates;
-	NFATable->Clear();
-	DFATable->Clear();
+	//delete[] Edge;
+	//delete[] AcceptStates;
+	//NFATable->Clear();
+	//DFATable->clear();
 }
 //获取正则输入
 void DFA::InputRegex()
@@ -149,34 +149,32 @@ void DFA::InputRegex()
 	cout << " 请输入正则表达式" << endl;
 	cin >> Regex;
 }
-//加入连结点
+//加入"."连结点
 void DFA::InsertNode()
 {
 	int i = 0,j, len = strlen(Regex);
 	int length = len;
-	while (len--&&i<=length-1)
+	len--;
+	while (len--)
 	{
 		if (((Regex[i] != '(' && Regex[i] != '.' && Regex[i] != '|')
-			|| Regex[i] == ')'
-			|| Regex[i] == '*')
+			|| Regex[i] == ')'|| Regex[i] == '*')
 			&& (Regex[i + 1] != ')' && Regex[i + 1] != '.' && Regex[i + 1] != '|' && Regex[i + 1] != '*'))
 		{
-			for (j = len; j>i + 1; j--)
+			for (j =length; j >i;j--)
 			{
-				Regex[j] = Regex[j - 1];
+				Regex[j+1] = Regex[j];
 			}
 			Regex[i + 1] = '.';
-			len++;
-			Regex[len] = '\0';
+			length++;
+			Regex[length] = '\0';
 			i++;
 		}
 		i++;
 	}
-	cout << "\n第一步: 加入连结点\n"
-		<< Regex << "\n"
-		<< "字符串长度: " << len
-		<< "\n\n------------------------" << endl;
-	cout << "\n第一步：加入连结点\n" << Regex << endl;
+	cout << endl;
+	cout << "加入连结点后     " << endl;
+	cout<<Regex << endl;
 	cout << "字符串长度：" <<length<<endl;
 }
 //判断运算符优先级
@@ -278,7 +276,8 @@ void DFA::GetEdgeNumber()
 	cout << "\n字符个数: " << EdgeNumber
 		<< "\n\n------------------------" << endl;
 }
-//用Thompson构造法构造NFA
+
+/*//用Thompson构造法构造NFA
 void DFA::Thompson()
 { 
 	int i, j;
@@ -303,3 +302,4 @@ void DFA::Thompson()
 	}
 	
 }
+*/

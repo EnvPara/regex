@@ -1,6 +1,7 @@
 #ifndef _DFA_H
 #define _DFA_H
 #include <string>
+#include "TransTable.h"
 #include "Adj.h"
 using namespace std;
 class DFA
@@ -22,7 +23,7 @@ public:
 	int NFAStatesNumber;
 	int DFAStatesNumber;
 	int DtranNumber;
-	AdjacentTable *NFATable;
+	TransTable *DFATable;
 	int *AcceptStates;
 };
 #endif
