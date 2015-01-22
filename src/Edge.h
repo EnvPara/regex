@@ -1,5 +1,6 @@
 #ifndef _EDGE_H_
 #define _EDGE_H_
+// 定义邻接表的边表类
 class Edge
 {
 public:

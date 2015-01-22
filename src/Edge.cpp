@@ -1,6 +1,7 @@
 #include "Edge.h"
 #include <iostream>
 using namespace std;
+// 定义邻接表的边表类
 Edge::Edge()
 {
 	number = -1;

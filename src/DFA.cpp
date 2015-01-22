@@ -282,7 +282,7 @@ void DFA::GetEdgeNumber()
 		<< "\n\n------------------------" << endl;
 }
 
-/*//用Thompson构造法构造NFA
+//用Thompson构造法构造NFA
 void DFA::Thompson()
 { 
 	int i, j;
@@ -300,11 +300,63 @@ void DFA::Thompson()
 	ch = RegexPost[i];
 	while (ch != '\0')
 	{
-		if (ch = '.')
+		if (ch == '.')
 		{
 			s2 = States->Pop();
+			int Ex1 = States->Pop();
+			int Ex2 = States->Pop();
+			s1 = States->Pop();
+			NFATable->InsertEdgeByValue(Ex2, Ex1, '~');
+			States->Push(s1);
+			States->Push(s2);
+		}
+		else if (ch == '*')
+		{
+			s2 = States->Pop();
+			s1 = States->Pop();
+			NFATable->InsertVertex(i);
+			NFATable->InsertVertex(i + 1);
+			NFATable->InsertEdgeByValue(i, i + 1, '~');
+			NFATable->InsertEdgeByValue(s2, s1, '~');
+			NFATable->InsertEdgeByValue(i, s1, '~');
+			NFATable->InsertEdgeByValue(s2, i + 1, '~');
+			s1 = i;
+			s2 = i + 1;
+			States->Push(s1);
+			States->Push(s2);
+			i += 2;
+		}
+		else if (ch == '|')
+		{
+			s2 = States->Pop();
+			int temp1 = States->Pop();
+			int temp2 = States->Pop();
+			s1 = States->Pop();
+			NFATable->InsertVertex(i);
+			NFATable->InsertVertex(i + 1);
+			NFATable->InsertEdgeByValue(i, s1, '~');
+			NFATable->InsertEdgeByValue(i, temp1, '~');
+			NFATable->InsertEdgeByValue(temp2, i + 1, '~');
+			NFATable->InsertEdgeByValue(s2, i + 1, '~');
+			s1 = i;
+			s2 = i + 1;
+			States->Push(s1);
+			States->Push(s2);
+			i += 2;
+		}
+		else 
+		{
+			NFATable->InsertVertex(i);
+			NFATable->InsertVertex(i + 1);
+			NFATable->InsertEdgeByValue(i, i + 1, ch);
+			s1 = i;
+			s2 = i + 1;
+			States->Push(s1);
+			States->Push(s2);
+			i += 2;
 		}
 	}
-	
+	s2 = States->Pop();
+	s1 = States->Pop();
+	NFAStatesNumber = s2 + 1;
 }
-*/
