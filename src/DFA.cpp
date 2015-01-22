@@ -197,14 +197,56 @@ void DFA::RegextoPost()
 	char ch, cl;
 	strcpy(RegexPost, "\0");
 	LinkStack<char> *Value = new LinkStack<char>();
-	LinkStack<char >*Operate = new LinkStack<char>();
 	Value->Clear();
-	Operate->Clear();
+	ch = Regex[i];
+	Value->Push('#');
 	ch = Regex[i];
 	while (ch != '\0')
 	{
-
+		if (ch == '(')
+		{
+			Value->Push(ch);
+			ch = Regex[++i];
+		}
+		else if (ch == ')')
+		{
+			while (Value->GetTop() != '(')
+			{
+				RegexPost[j++] = Value->Pop();
+			}
+			Value->Pop();
+			ch = Regex[++i];
+		}
+		else if ((ch == '|') || (ch == '*') || (ch == '.'))
+		{
+			cl = Value->GetTop();
+			while (Precedence(cl) >= Precedence(ch))
+			{
+				RegexPost[j++] = cl;
+				Value->Pop();
+				cl = Value->GetTop();
+			}
+			Value->Push(ch);
+			ch = Regex[++i];
+		}
+		else
+		{
+			RegexPost[j++] = ch;
+			ch = Regex[++i];
+		}
 	}
+	ch = Value->Pop();
+	while ((ch == '|') || (ch == '*') || (ch == '.'))
+	{
+		RegexPost[j++] = ch;
+		ch = Value->Pop();
+	}
+	RegexPost[j] = '\0';
+	Value->Clear();
+	cout << "\n第二步: 转为后缀式\n"
+		<< RegexPost << "\n"
+		<< "字符串长度: " << strlen(RegexPost)
+		<< "\n\n------------------------" << endl;
 }
 //扫描逆波兰式中除运算符以外的字符的数目
 void DFA::GetEdgeNumber()
