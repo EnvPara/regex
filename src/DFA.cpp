@@ -1,7 +1,11 @@
 #include "DFA.h"
+#include "Edge.h"
+#include "Vertex.h"
 #include <string>
 #include <stack>
+#include <vector>
 #include <iostream>
+#include <queue>
 using namespace std;
 template <class T>
 class LinkStack;
@@ -126,12 +130,13 @@ DFA::DFA()
 {
 	Regex = new char[128];
 	RegexPost = new char[128]; 
-	Edge = new char[128];
+	EdgeNum = new char[128];
 	EdgeNumber = 0;
 	DFAStatesNumber = 0;
 	NFAStatesNumber = 0;
 	DtranNumber = 0;
 	NFATable = new AdjacentTable();
+	DFATable = new AdjacentTable();
 }
 //DFA的析构函数
 DFA::~DFA()
@@ -262,21 +267,21 @@ void DFA::GetEdgeNumber()
 		}
 		for (j = 0; j < EdgeNumber; j++)
 		{
-			if (RegexPost[i] == Edge[j])
+			if (RegexPost[i] == EdgeNum[j])
 				break;
 		}
 		if (j == EdgeNumber)
 		{
-			Edge[EdgeNumber] = RegexPost[i];
+			EdgeNum[EdgeNumber] = RegexPost[i];
 			EdgeNumber++;
 		}
 		i++;
 	}
-	Edge[EdgeNumber] = '\0';
+	EdgeNum[EdgeNumber] = '\0';
 	cout << "\n第三步: 获取字符集\n";
 	for (i = 0; i<EdgeNumber; i++)
 	{
-		cout << Edge[i] << ' ';
+		cout << EdgeNum[i] << ' ';
 	}
 	cout << "\n字符个数: " << EdgeNumber
 		<< "\n\n------------------------" << endl;
@@ -285,7 +290,7 @@ void DFA::GetEdgeNumber()
 //用Thompson构造法构造NFA
 void DFA::Thompson()
 { 
-	int i, j;
+	int i, j; 
 	char ch;
 	int s1, s2;
 	LinkStack<int >*States = new LinkStack<int >();
@@ -295,9 +300,8 @@ void DFA::Thompson()
 		cout << "No Regex Expression Find" << endl;
 		exit(1);
 	}
-	NFATable->SetValue(0, 0);
 	i = 1; j = 0;
-	ch = RegexPost[i];
+	ch = RegexPost[j];
 	while (ch != '\0')
 	{
 		if (ch == '.')
@@ -355,8 +359,80 @@ void DFA::Thompson()
 			States->Push(s2);
 			i += 2;
 		}
+		j++;
+		ch = RegexPost[j];
 	}
 	s2 = States->Pop();
 	s1 = States->Pop();
 	NFAStatesNumber = s2 + 1;
+}
+//利用子集构造法 NFA到DFA
+void DFA::NFAtoDFA()
+{
+	int states;
+	int VertexNode[1001];
+	queue<int > DFAStates;//DFA的状态集合
+	queue<int >NFANode;//NFA的状态子集合
+	int NFANodeAll[100][100];
+	DFAStates.push(1);
+	int Pointer = 0;
+	for (int i = 0; i < NFATable->numOfVertexs; i++)
+		VertexNode[i] = 0;//设置一个数组，存储是否访问过
+	states = DFAStates.front();//获得DFA状态队列的第一个
+	/*
+		从1状态开始先找出到达的其它位置
+	*/
+	for (int i = 0; i < EdgeNumber; i++)
+	{
+		char weight = EdgeNum[i];
+		Vertex *P = new Vertex;
+		P = NFATable->StartVertex;
+		for (int j = 0; j < states; j++)
+			P = P->Next;
+		if (P->Out->Link == NULL)
+		{
+			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+				NFANode.push(P->Out->position);
+		}
+		while (P->Out->Link != NULL)
+		{
+			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+				NFANode.push(P->Out->position);
+		}
+		if (NFANode.empty())
+			break;
+		states++;
+		while (!NFANode.empty())
+		{
+			int Visual = NFANode.front();
+			NFANode.pop();
+			NFANodeAll[states][Pointer] = Visual;
+			Pointer++;
+			P = NFATable->StartVertex;
+			for (int j = 0; j < Visual; j++)
+				P = P->Next;
+			if (P->Out&&P->Out->Link == NULL)
+			{
+				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
+					NFANode.push(P->Out->position);
+			}
+			else if (P->Out)
+			{
+				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
+					NFANode.push(P->Out->position);
+				Edge *LinkNode= P->Out->Link;
+				while (LinkNode!= NULL)
+				{
+					if (LinkNode->weight == '~'&&VertexNode[LinkNode->position] == 0)
+						NFANode.push(LinkNode->position);
+					LinkNode = LinkNode->Link;
+				}
+			}
+		}
+		DFATable->InsertEdgeByValue(1, states, EdgeNum[i]);
+	}
+	/*
+		根据1状态得出的NFA子状态进去查找 ！
+	*/
+	
 }

@@ -4,11 +4,10 @@
 //用领接表定义的图类
 class AdjacentTable
 {
-private:
+public:
 	Vertex *StartVertex;
 	int numOfVertexs;
 	int numOfEdge;
-public:
 	AdjacentTable();
 	~AdjacentTable();
 	int GetValueByPos(int pos) const;

@@ -17,13 +17,15 @@ public:
 	int Precedence(char symbol);
 	void GetEdgeNumber();
 	void Thompson();//用Thompson构造法构造NFA
+	void NFAtoDFA();//利用子集构造法 NFA到DFA
 	int EdgeNumber;
 	AdjacentTable *NFATable;
-	char *Edge;
+	char *EdgeNum;
 	int NFAStatesNumber;
 	int DFAStatesNumber;
 	int DtranNumber;
-	TransTable *DFATable;
+	AdjacentTable *DFATable;
 	int *AcceptStates;
+
 };
 #endif
