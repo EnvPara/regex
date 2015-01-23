@@ -468,6 +468,20 @@ void DFA::NFAtoDFA()
 						NFANode.push(P->Out->position);
 					VertexNode[P->Out->position] = 1;
 				}
+				while (P->Out->Link != NULL)
+				{
+					if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+						NFANode.push(P->Out->position);
+					VertexNode[P->Out->position] = 1;
+				}
+				if (NFANode.empty())
+					break;
+				states++;
+				update++;
+				while (!NFANode.empty())
+				{
+
+				}
 
 			}
 		}
