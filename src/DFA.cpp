@@ -366,19 +366,27 @@ void DFA::Thompson()
 	s1 = States->Pop();
 	NFAStatesNumber = s2 + 1;
 }
+void SetNFANodeAll(int (*A)[100])
+{
+	for (int i = 0; i < 101;i++)
+	for (int j = 0; j < 101; j++)
+		A[i][j] = 0;
+}
 //利用子集构造法 NFA到DFA
 void DFA::NFAtoDFA()
 {
-	int states;
+	int states, update=0;
 	int VertexNode[1001];
 	queue<int > DFAStates;//DFA的状态集合
 	queue<int >NFANode;//NFA的状态子集合
 	int NFANodeAll[100][100];
+	SetNFANodeAll(NFANodeAll);
 	DFAStates.push(1);
 	int Pointer = 0;
 	for (int i = 0; i < NFATable->numOfVertexs; i++)
 		VertexNode[i] = 0;//设置一个数组，存储是否访问过
 	states = DFAStates.front();//获得DFA状态队列的第一个
+	update = states;
 	/*
 		从1状态开始先找出到达的其它位置
 	*/
@@ -393,11 +401,13 @@ void DFA::NFAtoDFA()
 		{
 			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
 				NFANode.push(P->Out->position);
+			VertexNode[P->Out->position] = 1;
 		}
 		while (P->Out->Link != NULL)
 		{
 			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
 				NFANode.push(P->Out->position);
+			VertexNode[P->Out->position] = 1;
 		}
 		if (NFANode.empty())
 			break;
@@ -415,24 +425,52 @@ void DFA::NFAtoDFA()
 			{
 				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
 					NFANode.push(P->Out->position);
+				VertexNode[P->Out->position] = 1;
 			}
 			else if (P->Out)
 			{
 				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
 					NFANode.push(P->Out->position);
+				VertexNode[P->Out->position] = 1;
 				Edge *LinkNode= P->Out->Link;
 				while (LinkNode!= NULL)
 				{
 					if (LinkNode->weight == '~'&&VertexNode[LinkNode->position] == 0)
 						NFANode.push(LinkNode->position);
+					VertexNode[P->Out->position] = 1;
 					LinkNode = LinkNode->Link;
 				}
 			}
 		}
 		DFATable->InsertEdgeByValue(1, states, EdgeNum[i]);
 	}
+	update = states - update;
+	NFAStatesNumber = 1;
 	/*
 		根据1状态得出的NFA子状态进去查找 ！
 	*/
+	while (update != 0)
+	{
+		VertexNode[1001] = { 0 };
+		for (int j = 0; j < EdgeNumber; j++)
+		{
+			int i = 0;
+			char weight = EdgeNum[j];
+			while (NFANodeAll[NFAStatesNumber][i] != 0)
+			{
+				Vertex *P = new Vertex;
+				P = NFATable->StartVertex;
+				for (int i = 0; i < NFANodeAll[NFAStatesNumber][i]; i++)
+					P = P->Next;
+				if (P->Out->Link == NULL)
+				{
+					if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+						NFANode.push(P->Out->position);
+					VertexNode[P->Out->position] = 1;
+				}
+
+			}
+		}
+	}
 	
 }
