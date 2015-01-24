@@ -3,9 +3,7 @@
 #include "Vertex.h"
 #include <string>
 #include <stack>
-#include <vector>
 #include <iostream>
-#include <queue>
 using namespace std;
 template <class T>
 class LinkStack;
@@ -375,18 +373,17 @@ void SetNFANodeAll(int (*A)[100])
 //利用子集构造法 NFA到DFA
 void DFA::NFAtoDFA()
 {
-	int states, update=0;
-	int VertexNode[1001];
-	queue<int > DFAStates;//DFA的状态集合
-	queue<int >NFANode;//NFA的状态子集合
+	int States, update = 0;
+	int VertexNode[1001] = { 0 };
+	LinkStack<int> DFAStates;//DFA的状态集合
+	LinkStack<int>NFANode;//NFA的状态子集合
 	int NFANodeAll[100][100];
 	SetNFANodeAll(NFANodeAll);
-	DFAStates.push(1);
 	int Pointer = 0;
 	for (int i = 0; i < NFATable->numOfVertexs; i++)
 		VertexNode[i] = 0;//设置一个数组，存储是否访问过
-	states = DFAStates.front();//获得DFA状态队列的第一个
-	update = states;
+	States = 1;
+	DFATable->InsertVertex(1);
 	/*
 		从1状态开始先找出到达的其它位置
 	*/
@@ -395,28 +392,37 @@ void DFA::NFAtoDFA()
 		char weight = EdgeNum[i];
 		Vertex *P = new Vertex;
 		P = NFATable->StartVertex;
-		for (int j = 0; j < states; j++)
+		for (int j = 0; j < States; j++)
 			P = P->Next;
 		if (P->Out->Link == NULL)
 		{
 			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
-				NFANode.push(P->Out->position);
+				NFANode.Push(P->Out->position);
 			VertexNode[P->Out->position] = 1;
 		}
-		while (P->Out->Link != NULL)
+		if(P->Out->Link != NULL)
 		{
 			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
-				NFANode.push(P->Out->position);
+				NFANode.Push(P->Out->position);
 			VertexNode[P->Out->position] = 1;
+			Edge *PLink = P->Out->Link;
+			while (PLink != NULL)
+			{
+				if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+					NFANode.Push(P->Out->position);
+				VertexNode[P->Out->position] = 1;
+				PLink = PLink->Link;
+			}
 		}
-		if (NFANode.empty())
-			break;
-		states++;
-		while (!NFANode.empty())
+		if (NFANode.IsEmpty())
+			continue;
+		States++;
+		DFAStates.Push(States);
+		while (!NFANode.IsEmpty())
 		{
-			int Visual = NFANode.front();
-			NFANode.pop();
-			NFANodeAll[states][Pointer] = Visual;
+			int Visual = NFANode.GetTop();
+			NFANode.Pop();
+			NFANodeAll[States][Pointer] = Visual;
 			Pointer++;
 			P = NFATable->StartVertex;
 			for (int j = 0; j < Visual; j++)
@@ -424,67 +430,105 @@ void DFA::NFAtoDFA()
 			if (P->Out&&P->Out->Link == NULL)
 			{
 				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
-					NFANode.push(P->Out->position);
+					NFANode.Push(P->Out->position);
 				VertexNode[P->Out->position] = 1;
 			}
 			else if (P->Out)
 			{
 				if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
-					NFANode.push(P->Out->position);
+					NFANode.Push(P->Out->position);
 				VertexNode[P->Out->position] = 1;
-				Edge *LinkNode= P->Out->Link;
-				while (LinkNode!= NULL)
+				Edge *LinkNode = P->Out->Link;
+				while (LinkNode != NULL)
 				{
 					if (LinkNode->weight == '~'&&VertexNode[LinkNode->position] == 0)
-						NFANode.push(LinkNode->position);
+						NFANode.Push(LinkNode->position);
 					VertexNode[P->Out->position] = 1;
 					LinkNode = LinkNode->Link;
 				}
 			}
 		}
-		DFATable->InsertEdgeByValue(1, states, EdgeNum[i]);
+		DFATable->InsertVertex(States);
+		DFATable->InsertEdgeByValue(1, States, EdgeNum[i]);
 	}
-	update = states - update;
-	NFAStatesNumber = 1;
-	/*
-		根据1状态得出的NFA子状态进去查找 ！
-	*/
-	while (update != 0)
+	//	根据1状态得出的NFA子状态进去查找 ！
+	while (!DFAStates.IsEmpty())
 	{
-		VertexNode[1001] = { 0 };
+		NFAStatesNumber = DFAStates.GetTop();
+		DFAStates.Pop();
 		for (int j = 0; j < EdgeNumber; j++)
 		{
 			int i = 0;
 			char weight = EdgeNum[j];
 			while (NFANodeAll[NFAStatesNumber][i] != 0)
 			{
+				int VertexNode[1001] = { 0 };
 				Vertex *P = new Vertex;
 				P = NFATable->StartVertex;
-				for (int i = 0; i < NFANodeAll[NFAStatesNumber][i]; i++)
+				for (int k = 0; k < NFANodeAll[NFAStatesNumber][i]; k++)
 					P = P->Next;
+				i++;
+				if (P->Out == NULL)
+					continue;
 				if (P->Out->Link == NULL)
 				{
 					if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
-						NFANode.push(P->Out->position);
+						NFANode.Push(P->Out->position);
 					VertexNode[P->Out->position] = 1;
 				}
-				while (P->Out->Link != NULL)
+				if (P->Out->Link != NULL)
 				{
 					if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
-						NFANode.push(P->Out->position);
+						NFANode.Push(P->Out->position);
 					VertexNode[P->Out->position] = 1;
+					Edge *PLink = P->Out->Link;
+					while (PLink != NULL)
+					{
+						if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
+							NFANode.Push(P->Out->position);
+						VertexNode[P->Out->position] = 1;
+						PLink = PLink->Link;
+					}
 				}
-				if (NFANode.empty())
-					break;
-				states++;
-				update++;
-				while (!NFANode.empty())
+				if (NFANode.IsEmpty())
+					continue;
+				States++;
+				DFAStates.Push(States);
+				Pointer = 0;
+				while (!NFANode.IsEmpty())
 				{
+					int Visual = NFANode.GetTop();
+					NFANode.Pop();
+					NFANodeAll[States][Pointer] = Visual;
+					Pointer++;
+					P = NFATable->StartVertex;
+					for (int j = 0; j < Visual; j++)
+						P = P->Next;
+					if (P->Out&&P->Out->Link == NULL)
+					{
+						if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
+							NFANode.Push(P->Out->position);
+						VertexNode[P->Out->position] = 1;
+					}
+					else if (P->Out)
+					{
+						if (P->Out->weight == '~'&&VertexNode[P->Out->position] == 0)//没有被访问过 
+							NFANode.Push(P->Out->position);
+						VertexNode[P->Out->position] = 1;
+						Edge *LinkNode = P->Out->Link;
+						while (LinkNode != NULL)
+						{
+							if (LinkNode->weight == '~'&&VertexNode[LinkNode->position] == 0)
+								NFANode.Push(LinkNode->position);
+							VertexNode[P->Out->position] = 1;
+							LinkNode = LinkNode->Link;
+						}
 
+					}
 				}
-
+				DFATable->InsertVertex(States);
+				DFATable->InsertEdgeByValue(NFAStatesNumber, States, EdgeNum[j]);
 			}
 		}
 	}
-	
 }
