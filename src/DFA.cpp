@@ -284,7 +284,6 @@ void DFA::GetEdgeNumber()
 	cout << "\n字符个数: " << EdgeNumber
 		<< "\n\n------------------------" << endl;
 }
-
 //用Thompson构造法构造NFA
 void DFA::Thompson()
 { 
@@ -364,11 +363,33 @@ void DFA::Thompson()
 	s1 = States->Pop();
 	NFAStatesNumber = s2 + 1;
 }
+//设定集合数组为0
 void SetNFANodeAll(int (*A)[100])
 {
 	for (int i = 0; i < 101;i++)
 	for (int j = 0; j < 101; j++)
 		A[i][j] = 0;
+}
+//判断是否是同一个DFA状态
+int Judge(int States,int Jud[][100])
+{
+	int i, j, sum;
+	i = 2;
+	while (Jud[i][0] != 0)
+	{
+		sum = 0;
+		j = 0;
+		while (Jud[i][j] != 0)
+		{
+			if (Jud[States][j] == Jud[i][j])
+				sum++;
+			j++;
+		}
+		if (sum == j)
+			return i;
+		i++;
+	}
+	return States;
 }
 //利用子集构造法 NFA到DFA
 void DFA::NFAtoDFA()
@@ -493,7 +514,6 @@ void DFA::NFAtoDFA()
 				if (NFANode.IsEmpty())
 					continue;
 				States++;
-				DFAStates.Push(States);
 				Pointer = 0;
 				while (!NFANode.IsEmpty())
 				{
@@ -526,9 +546,21 @@ void DFA::NFAtoDFA()
 
 					}
 				}
-				DFATable->InsertVertex(States);
+				int Sign = States;
+				States = Judge(States,NFANodeAll);
+				if (States == Sign)
+				{
+					DFATable->InsertVertex(States);
+					DFAStates.Push(States);
+				}
 				DFATable->InsertEdgeByValue(NFAStatesNumber, States, EdgeNum[j]);
+				States = Sign;
 			}
 		}
 	}
+}
+//将NFA状态图的1号结点设为NFA图的开始状态
+void DFA::SetStart()
+{
+	DFATable->StartVertex = DFATable->StartVertex->Next;
 }

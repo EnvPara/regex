@@ -26,6 +26,6 @@ public:
 	int DtranNumber;
 	AdjacentTable *DFATable;
 	int *AcceptStates;
-
+	void SetStart();
 };
 #endif
