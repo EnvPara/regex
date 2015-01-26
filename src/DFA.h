@@ -18,6 +18,9 @@ public:
 	void GetEdgeNumber();
 	void Thompson();//用Thompson构造法构造NFA
 	void NFAtoDFA();//利用子集构造法 NFA到DFA
+	void Hopcroft();//利用Hopcroft DFA到最小化DFA
+	void GetAcceptState();//得到NFA的接受状态集合
+	int NFAAcceptStates[500];//NFA接受状态数组
 	int EdgeNumber;
 	AdjacentTable *NFATable;
 	char *EdgeNum;
@@ -25,7 +28,6 @@ public:
 	int DFAStatesNumber;
 	int DtranNumber;
 	AdjacentTable *DFATable;
-	int *AcceptStates;
 	void SetStart();
 };
 #endif

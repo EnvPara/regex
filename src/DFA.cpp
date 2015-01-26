@@ -559,8 +559,32 @@ void DFA::NFAtoDFA()
 		}
 	}
 }
-//将NFA状态图的1号结点设为NFA图的开始状态
+//将NFA和DFA状态图的1号结点设为NFA图的开始状态
 void DFA::SetStart()
 {
 	DFATable->StartVertex = DFATable->StartVertex->Next;
+	NFATable->StartVertex = NFATable->StartVertex->Next;
+}
+void SetNFAAcceptStates(int *States)
+{
+	for (int i = 0; i <= 500; i++)
+		States[i] = 0;
+}
+//得到NFA的接受状态集合
+void DFA::GetAcceptState()
+{
+	SetNFAAcceptStates(NFAAcceptStates);
+	Vertex *P = NFATable->StartVertex;
+	for (int i = 1; i < NFATable->numOfVertexs; i++)
+	{
+		if (P->Out == NULL)
+		{
+			NFAAcceptStates[i] = i;
+		}
+		P = P->Next;
+	}
+}
+void DFA::Hopcroft()
+{
+
 }
