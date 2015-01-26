@@ -21,6 +21,8 @@ public:
 	void Hopcroft();//利用Hopcroft DFA到最小化DFA
 	void GetAcceptState();//得到NFA的接受状态集合
 	int NFAAcceptStates[500];//NFA接受状态数组
+	int DFAAcceptStates[500];//DFA接受状态数组
+	int NFANodeAll[100][100];//NFA的状态集合
 	int EdgeNumber;
 	AdjacentTable *NFATable;
 	char *EdgeNum;
@@ -28,6 +30,5 @@ public:
 	int DFAStatesNumber;
 	int DtranNumber;
 	AdjacentTable *DFATable;
-	void SetStart();
 };
 #endif

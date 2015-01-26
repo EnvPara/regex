@@ -391,6 +391,11 @@ int Judge(int States,int Jud[][100])
 	}
 	return States;
 }
+void SetAcceptStates(int *States)
+{
+	for (int i = 0; i <= 500; i++)
+		States[i] = 0;
+}
 //利用子集构造法 NFA到DFA
 void DFA::NFAtoDFA()
 {
@@ -407,7 +412,7 @@ void DFA::NFAtoDFA()
 	DFATable->InsertVertex(1);
 	/*
 		从1状态开始先找出到达的其它位置
-	*/
+		*/
 	for (int i = 0; i < EdgeNumber; i++)
 	{
 		char weight = EdgeNum[i];
@@ -421,7 +426,7 @@ void DFA::NFAtoDFA()
 				NFANode.Push(P->Out->position);
 			VertexNode[P->Out->position] = 1;
 		}
-		if(P->Out->Link != NULL)
+		if (P->Out->Link != NULL)
 		{
 			if (P->Out->weight == weight&&VertexNode[P->Out->position] == 0)//没有被访问过 
 				NFANode.Push(P->Out->position);
@@ -472,7 +477,9 @@ void DFA::NFAtoDFA()
 		DFATable->InsertVertex(States);
 		DFATable->InsertEdgeByValue(1, States, EdgeNum[i]);
 	}
-	//	根据1状态得出的NFA子状态进去查找 ！
+	/*
+		根据1状态得出的NFA子状态进去查找 ！
+		*/
 	while (!DFAStates.IsEmpty())
 	{
 		NFAStatesNumber = DFAStates.GetTop();
@@ -547,7 +554,7 @@ void DFA::NFAtoDFA()
 					}
 				}
 				int Sign = States;
-				States = Judge(States,NFANodeAll);
+				States = Judge(States, NFANodeAll);
 				if (States == Sign)
 				{
 					DFATable->InsertVertex(States);
@@ -558,23 +565,18 @@ void DFA::NFAtoDFA()
 			}
 		}
 	}
-}
-//将NFA和DFA状态图的1号结点设为NFA图的开始状态
-void DFA::SetStart()
-{
+	/*
+		将NFA和DFA状态图的1号结点设为NFA图的开始状态
+		*/
 	DFATable->StartVertex = DFATable->StartVertex->Next;
 	NFATable->StartVertex = NFATable->StartVertex->Next;
-}
-void SetNFAAcceptStates(int *States)
-{
-	for (int i = 0; i <= 500; i++)
-		States[i] = 0;
-}
-//得到NFA的接受状态集合
-void DFA::GetAcceptState()
-{
-	SetNFAAcceptStates(NFAAcceptStates);
+	/*
+		得到NFA和DFA的接受状态集合
+		*/
+	SetAcceptStates(NFAAcceptStates);
+	SetAcceptStates(DFAAcceptStates);
 	Vertex *P = NFATable->StartVertex;
+	//得到NFA的接受状态集合
 	for (int i = 1; i < NFATable->numOfVertexs; i++)
 	{
 		if (P->Out == NULL)
@@ -582,6 +584,31 @@ void DFA::GetAcceptState()
 			NFAAcceptStates[i] = i;
 		}
 		P = P->Next;
+	}
+	//得到 DFA的接受状态集合
+	for (int i = 2; i <= States; i++)
+	{
+		for (int j = 0; j <= NFATable->numOfVertexs; j++)
+		{
+			int k = 0;
+			while (NFANodeAll[i][k] != 0)
+			{
+				for (int n = 0; n <= NFATable->numOfVertexs; n++)
+				{
+					if (NFAAcceptStates[n] == NFANodeAll[i][k])
+						DFAAcceptStates[i] = i;
+				}
+				k++;
+			}
+		}
+	}
+	int Vol;
+	for (int i = 0; i <= States; i++)
+	{
+		if (DFAAcceptStates[i] != 0)
+			Vol = Judge(DFAAcceptStates[i], NFANodeAll);
+		if (Vol != DFAAcceptStates[i])
+			DFAAcceptStates[i] = 0;
 	}
 }
 void DFA::Hopcroft()
