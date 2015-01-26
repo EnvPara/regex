@@ -1,12 +1,18 @@
 #include "TransTable.h"
 //构造函数
-TransTable::TransTable(int rowNum,int colNum)
+TransTable::TransTable(int rowNum, int colNum)
 {
 	rowNumber = rowNum;
 	colNumber = colNum;
-	Matrix = (int **)(new int*[rowNumber]);
-	for (int i = 0; i < rowNumber; i++)
-		Matrix[i] = new int[colNumber];
+	Matrix[rowNumber][colNumber] = { 0 };
+}
+void TransTable::TransitCol(int num)
+{
+	colNumber = num;
+}
+void TransTable::TransitRow(int num)
+{
+	rowNumber = num;
 }
 //析构函数
 TransTable::~TransTable()
@@ -18,6 +24,7 @@ void TransTable::SetValue(int i, int j, int value)
 {
 	Matrix[i][j] = value;
 }
+//得到元素的值
 int  TransTable::GetValue(int i, int j)
 {
 	return Matrix[i][j];

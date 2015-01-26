@@ -23,9 +23,11 @@ public:
 	int NFAAcceptStates[500];//NFA接受状态数组
 	int DFAAcceptStates[500];//DFA接受状态数组
 	int NFANodeAll[100][100];//NFA的状态集合
-	int EdgeNumber;
+	TransTable *MiniDFATable;//最小化的DFA的矩阵
+	int EdgeNumber;//正则表达式中除运算符以外的字符的数目
 	AdjacentTable *NFATable;
-	char *EdgeNum;
+	char *EdgeNum;//正则表达式中除运算符以外的字符
+	int JudgeVertex(char a);//判断字符是除运算符以外的字符的第几个
 	int NFAStatesNumber;
 	int DFAStatesNumber;
 	int DtranNumber;

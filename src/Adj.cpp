@@ -109,7 +109,6 @@ void AdjacentTable::InsertVertex(int value)
 	p->Next = newVertex;
 	numOfVertexs++;
 }
-
 //按顶点位置插入边表
 void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 {

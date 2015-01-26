@@ -611,7 +611,45 @@ void DFA::NFAtoDFA()
 			DFAAcceptStates[i] = 0;
 	}
 }
+int DFA::JudgeVertex(char Judge)
+{
+	for (int i = 0; i < EdgeNumber; i++)
+	{
+		if (EdgeNum[i] == Judge)
+			return i;
+		else
+			continue;
+	}
+}
+//最小化DFA
 void DFA::Hopcroft()
 {
-
+	int WebSite;
+	MiniDFATable = new TransTable(EdgeNumber, DFATable->numOfVertexs);//设置矩阵的行,列
+	for (int i = 1; i <=DFATable->numOfVertexs; i++)
+	{
+		for (int j = 0; j < EdgeNumber; j++)
+		{
+			Vertex *P = DFATable->StartVertex;
+			for (int k = 1; k < i; k++)
+				P = P->Next;
+			if (P->Out->Link == NULL)
+			{
+				WebSite = JudgeVertex(P->Out->weight);
+				MiniDFATable->SetValue(WebSite,i, P->Out->position);
+			}
+			else
+			{
+				WebSite = JudgeVertex(P->Out->weight);
+				MiniDFATable->SetValue(WebSite, i, P->Out->position);
+				Edge *Plink = P->Out->Link;
+				while (Plink != NULL)
+				{
+					WebSite = JudgeVertex(Plink->weight);
+					MiniDFATable->SetValue(WebSite, i, Plink->position);
+					Plink = Plink->Link;
+				}
+			}
+		}
+	}
 }
