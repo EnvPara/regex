@@ -23,11 +23,17 @@ public:
 	int NFAAcceptStates[500];//NFA接受状态数组
 	int DFAAcceptStates[500];//DFA接受状态数组
 	int NFANodeAll[100][100];//NFA的状态集合
+	int MiniDFAStates[100][100];//最小DFA的状态集合 
 	TransTable *MiniDFATable;//最小化的DFA的矩阵
 	int EdgeNumber;//正则表达式中除运算符以外的字符的数目
 	AdjacentTable *NFATable;
 	char *EdgeNum;//正则表达式中除运算符以外的字符
 	int JudgeVertex(char a);//判断字符是除运算符以外的字符的第几个
+	void InputString();//输入需要匹配的字符串
+	string Input;//需要匹配的字符串
+	string Matchout; //与正则表达式匹配的字符
+	void Match();//将输入的字符串与正则进行匹配
+	Vertex *Backtrack(int i);//正则匹配失败，进行回溯
 	int NFAStatesNumber;
 	int DFAStatesNumber;
 	int DtranNumber;

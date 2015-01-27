@@ -4,7 +4,9 @@ TransTable::TransTable(int rowNum, int colNum)
 {
 	rowNumber = rowNum;
 	colNumber = colNum;
-	Matrix[rowNumber][colNumber] = { 0 };
+	for (int i = 0; i < rowNum;i++)
+	for (int j = 0; j < colNum; j++)
+		Matrix[i][j] = -1;
 }
 void TransTable::TransitCol(int num)
 {
