@@ -573,12 +573,12 @@ void DFA::NFAtoDFA()
 	NFATable->StartVertex = NFATable->StartVertex->Next;
 	/*
 		得到NFA和DFA的接受状态集合
-		*/
+	*/
 	SetAcceptStates(NFAAcceptStates);
 	SetAcceptStates(DFAAcceptStates);
 	Vertex *P = NFATable->StartVertex;
 	//得到NFA的接受状态集合
-	for (int i = 1; i < NFATable->numOfVertexs; i++)
+	for (int i = 1; i <NFATable->numOfVertexs; i++)
 	{
 		if (P->Out == NULL)
 		{
@@ -620,79 +620,51 @@ void DFA::InputString()
 	cin >> Input;
 	cout << "输入的字符串为:" << Input << endl;
 }
-//匹配失败，DFA进行回溯
-Vertex *DFA::Backtrack(int i)
-{
-	int Position;
-	Vertex *P = DFATable->StartVertex;
-	for (int j = 0; j < i-1; j++)
-	{
-		if (P->Out->Link == NULL)
-		{
-			if (P->Out->weight = Input[j])
-			{
-				Position = P->Out->position;
-				P = DFATable->StartVertex;
-				for (int j = 1; j < Position; j++)
-					P = P->Next;
-			}
-		}
-		else
-		{
-			if (P->Out->weight = Input[j])
-			{
-				Position = P->Out->position;
-				P = DFATable->StartVertex;
-				for (int j = 1; j < Position; j++)
-					P = P->Next;
-			}
-			Edge *Plink = new Edge;
-			Plink = P->Out->Link;
-			while (Plink != NULL)
-			{
-				if (Plink->weight == Input[i])
-				{
-					Position = Plink->position;
-					P = DFATable->StartVertex;
-					for (int j = 1; j < Position; j++)
-						P = P->Next;
-				}
-				else
-					Plink = Plink->Link;
-			}
-		}
-	}
-	return P;
-}
 //进行正则匹配
 void DFA::Match()
 {
-	int Position;
+	int Position = 0, Sign =0;
 	Matchout = Input;
 	Vertex *P = DFATable->StartVertex;
 	for (int i = 0; i < Input.length(); i++)
 	{
 		if (P->Out == NULL)
 		{
-			P = Backtrack(i);
-			i--;
+			P = DFATable->StartVertex;
 			continue;
 		}
 		if (P->Out->Link == NULL)
 		{
 			if (P->Out->weight == Input[i])
 			{
-				Matchout[i] = Input[i];
 				Position = P->Out->position;
 				P = DFATable->StartVertex;
 				for (int j = 1; j < Position; j++)
 					P = P->Next;
+				if (DFAAcceptStates[Position] == Position)//如果是接受状态
+				{
+					for (int j = Sign; j <= i; j++)
+						Matchout[j] = Input[j];
+					Sign = i+1;
+				}
 			}
 			else
 			{
-				Matchout[i] = '#';
-				P = Backtrack(i);
-				i--;
+				if (P==DFATable->StartVertex)
+				{
+					for (int j = Sign; j <= i; j++)
+						Matchout[j] = '#';
+					P = DFATable->StartVertex;
+					Sign = i + 1;
+				}
+				else
+				{
+					for (int j = Sign; j < i; j++)
+						Matchout[j] = '#';
+					P = DFATable->StartVertex;
+					Sign = i;
+					i--;
+				}
 			}
 		}
 		else
@@ -704,6 +676,12 @@ void DFA::Match()
 				P = DFATable->StartVertex;
 				for (int j = 1; j < Position; j++)
 					P = P->Next;
+				if (DFAAcceptStates[Position] == Position)//如果是接受状态
+				{
+					for (int j =Sign; j <= i; j++)
+						Matchout[j] = Input[j];
+					Sign = i+1;
+				}
 				continue;
 			}
 			Edge * Plink = new Edge;
@@ -717,6 +695,12 @@ void DFA::Match()
 					P = DFATable->StartVertex;
 					for (int j = 1; j < Position; j++)
 						P = P->Next;
+					if (DFAAcceptStates[Position] == Position)//如果是接受状态
+					{
+						for (int j = Sign; j <= i; j++)
+							Matchout[j] = Input[j];
+						Sign = i+1;
+					}
 					break;
 				}
 				else
@@ -724,13 +708,17 @@ void DFA::Match()
 			}
 			if (Plink == NULL)
 			{
-				Matchout[i] = '#';
-				P = Backtrack(i);
+				P = DFATable->StartVertex;
+				for (int j = Sign; j < i;j++)
+					Matchout[j] = '#';
+				Sign = i;
 				i--;
 			}
 
 		}
 	}
+	for (int i = Sign; i < Input.length(); i++)
+		Matchout[i] = '#';
 	cout << "正则表达式：" << Regex << endl;
 	cout << "输入的字符串："   << Input << endl;
 	cout << "正则匹配的字串符" << Matchout << endl;

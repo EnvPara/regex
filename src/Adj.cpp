@@ -165,6 +165,8 @@ void AdjacentTable::RemoveAllEdges(void)
 			q = p->Out;
 		}
 		p = p->Next;
+		if (p == NULL)
+			break;
 	}
 	numOfEdge = 0;
 }

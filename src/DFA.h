@@ -33,7 +33,6 @@ public:
 	string Input;//需要匹配的字符串
 	string Matchout; //与正则表达式匹配的字符
 	void Match();//将输入的字符串与正则进行匹配
-	Vertex *Backtrack(int i);//正则匹配失败，进行回溯
 	int NFAStatesNumber;
 	int DFAStatesNumber;
 	int DtranNumber;
