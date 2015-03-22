@@ -622,26 +622,9 @@ void InitializationDFAStates(int(*A)[101],char(*B)[101])
 		B[i][j] = '$';
 	}
 }
-void DFA::SetDFAStates()
+void DFA::Hopcroft()
 {
-	int i, j;
-	InitializationDFAStates(MiniDFAStates,DFAStates);
-	Vertex *P = new Vertex;
-	P = DFATable->StartVertex;
-	for (j = 0; j <EdgeNumber; j++)
-		DFAStates[(j + 1)][0] = EdgeNum[j];
-	for (i = 1; i <= DFAStatesNumber; i++)
-	{
-		if (P->Out->Link == NULL)
-		{
-			for (j = 0; j < EdgeNumber; j++)
-			{
-				if (P->Out->Link->weight == EdgeNum[j])
-					break;
-			}
-			DFAStates[i][j] = P->Out->number;
-		}
-	}
+
 }
 //输入需要匹配的字符串
 void DFA::InputString()

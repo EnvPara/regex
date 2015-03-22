@@ -10,7 +10,7 @@ int main()
 	DFA_each.GetEdgeNumber();//扫描逆波兰式中除运算符以外的字符的数目
 	DFA_each.Thompson();//用Thompson构造法构造NFA
 	DFA_each.NFAtoDFA();//利用子集构造法 NFA到DFA
-	DFA_each.SetDFAStates();//设置DFA的状态集合的数据表
+	DFA_each.Hopcroft();//利用最小化DFA算法
 	DFA_each.InputString();//输入需要匹配的字符串
 	DFA_each.Match();//进行正则匹配
 	system("pause");
