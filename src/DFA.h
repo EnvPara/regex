@@ -1,7 +1,6 @@
 #ifndef _DFA_H
 #define _DFA_H
 #include <string>
-#include "TransTable.h"
 #include "Adj.h"
 using namespace std;
 class DFA
@@ -23,8 +22,6 @@ public:
 	int NFAAcceptStates[500];//NFA接受状态数组
 	int DFAAcceptStates[500];//DFA接受状态数组
 	int NFANodeAll[100][100];//NFA的状态集合
-	int MiniDFAStates[100][100];//最小DFA的状态集合 
-	TransTable *MiniDFATable;//最小化的DFA的矩阵
 	int EdgeNumber;//正则表达式中除运算符以外的字符的数目
 	AdjacentTable *NFATable;
 	char *EdgeNum;//正则表达式中除运算符以外的字符
@@ -35,7 +32,9 @@ public:
 	void Match();//将输入的字符串与正则进行匹配
 	int NFAStatesNumber;
 	int DFAStatesNumber;
-	int DtranNumber;
 	AdjacentTable *DFATable;
+	char DFAStates[101][101];//DFA的状态集合的数据表
+	int MiniDFAStates[101][101];//最小化DFA时的状态集合
+	void SetDFAStates();//设置DFA的状态集合的数据表
 };
 #endif

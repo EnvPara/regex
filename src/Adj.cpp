@@ -65,7 +65,7 @@ char AdjacentTable::GetWeightByPos(int v1, int v2) const
 		}
 		Edge *q = p->Out;
 		while (q)
-		{ 
+		{
 			if (q->position == v2)
 				return q->weight;
 			else q = q->Link;
@@ -130,7 +130,7 @@ void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 		numOfEdge++;
 		return;
 	}
-	while (q->position!=v2&&q->Link)
+	while (q->position != v2&&q->Link)
 	{
 		q = q->Link;
 	}

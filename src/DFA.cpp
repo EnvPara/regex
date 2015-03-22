@@ -116,23 +116,22 @@ void LinkStack<T>::Clear()
 	while (top)
 	{
 		temp = top;
-		top = top->next; 
+		top = top->next;
 		delete temp;
 	}
 }
 /*
-		DFA
+DFA
 */
 //DFA构造函数
 DFA::DFA()
 {
 	Regex = new char[128];
-	RegexPost = new char[128]; 
+	RegexPost = new char[128];
 	EdgeNum = new char[128];
 	EdgeNumber = 0;
 	DFAStatesNumber = 0;
 	NFAStatesNumber = 0;
-	DtranNumber = 0;
 	NFATable = new AdjacentTable();
 	DFATable = new AdjacentTable();
 }
@@ -155,18 +154,18 @@ void DFA::InputRegex()
 //加入"."连结点
 void DFA::InsertNode()
 {
-	int i = 0,j, len = strlen(Regex);
+	int i = 0, j, len = strlen(Regex);
 	int length = len;
 	len--;
 	while (len--)
 	{
 		if (((Regex[i] != '(' && Regex[i] != '.' && Regex[i] != '|')
-			|| Regex[i] == ')'|| Regex[i] == '*')
+			|| Regex[i] == ')' || Regex[i] == '*')
 			&& (Regex[i + 1] != ')' && Regex[i + 1] != '.' && Regex[i + 1] != '|' && Regex[i + 1] != '*'))
 		{
-			for (j =length; j >i;j--)
+			for (j = length; j >i; j--)
 			{
-				Regex[j+1] = Regex[j];
+				Regex[j + 1] = Regex[j];
 			}
 			Regex[i + 1] = '.';
 			length++;
@@ -177,8 +176,8 @@ void DFA::InsertNode()
 	}
 	cout << endl;
 	cout << "第二步: 加入连结点后\n";
-	cout<<Regex << endl;
-	cout << "字符串长度：" <<length<<endl;
+	cout << Regex << endl;
+	cout << "字符串长度：" << length << endl;
 }
 //判断运算符优先级
 int DFA::Precedence(char symbol)
@@ -282,12 +281,12 @@ void DFA::GetEdgeNumber()
 		cout << EdgeNum[i] << ' ';
 	}
 	cout << "\n字符个数: " << EdgeNumber << endl;
-	cout<< "\n\n------------------------" << endl;
+	cout << "\n\n------------------------" << endl;
 }
 //用Thompson构造法构造NFA
 void DFA::Thompson()
-{ 
-	int i, j; 
+{
+	int i, j;
 	char ch;
 	int s1, s2;
 	LinkStack<int >*States = new LinkStack<int >();
@@ -345,7 +344,7 @@ void DFA::Thompson()
 			States->Push(s2);
 			i += 2;
 		}
-		else 
+		else
 		{
 			NFATable->InsertVertex(i);
 			NFATable->InsertVertex(i + 1);
@@ -364,14 +363,14 @@ void DFA::Thompson()
 	NFAStatesNumber = s2 + 1;
 }
 //设定集合数组为0
-void SetNFANodeAll(int (*A)[100])
+void SetNFANodeAll(int(*A)[100])
 {
-	for (int i = 0; i < 101;i++)
+	for (int i = 0; i < 101; i++)
 	for (int j = 0; j < 101; j++)
 		A[i][j] = 0;
 }
 //判断是否是同一个DFA状态
-int Judge(int States,int Jud[][100])
+int Judge(int States, int Jud[][100])
 {
 	int i, j, sum;
 	i = 2;
@@ -411,8 +410,8 @@ void DFA::NFAtoDFA()
 	States = 1;
 	DFATable->InsertVertex(1);
 	/*
-		从1状态开始先找出到达的其它位置
-		*/
+	从1状态开始先找出到达的其它位置
+	*/
 	for (int i = 0; i < EdgeNumber; i++)
 	{
 		char weight = EdgeNum[i];
@@ -478,8 +477,8 @@ void DFA::NFAtoDFA()
 		DFATable->InsertEdgeByValue(1, States, EdgeNum[i]);
 	}
 	/*
-		根据1状态得出的NFA子状态进去查找 ！
-		*/
+	根据1状态得出的NFA子状态进去查找 ！
+	*/
 	while (!DFAStates.IsEmpty())
 	{
 		NFAStatesNumber = DFAStates.GetTop();
@@ -566,13 +565,14 @@ void DFA::NFAtoDFA()
 		}
 	}
 	NFAStatesNumber = States;
+	DFAStatesNumber = DFATable->numOfVertexs - 1;
 	/*
-		将NFA和DFA状态图的1号结点设为NFA图的开始状态
-		*/
+	将NFA和DFA状态图的1号结点设为NFA图的开始状态
+	*/
 	DFATable->StartVertex = DFATable->StartVertex->Next;
 	NFATable->StartVertex = NFATable->StartVertex->Next;
 	/*
-		得到NFA和DFA的接受状态集合
+	得到NFA和DFA的接受状态集合
 	*/
 	SetAcceptStates(NFAAcceptStates);
 	SetAcceptStates(DFAAcceptStates);
@@ -612,6 +612,37 @@ void DFA::NFAtoDFA()
 			DFAAcceptStates[i] = 0;
 	}
 }
+//初始化DFA状态数据表和DFA状态集合
+void InitializationDFAStates(int(*A)[101],char(*B)[101])
+{
+	for (int i = 0; i < 101; i++)
+	for (int j = 0; j < 101; j++)
+	{
+		A[i][j] = 0;
+		B[i][j] = '$';
+	}
+}
+void DFA::SetDFAStates()
+{
+	int i, j;
+	InitializationDFAStates(MiniDFAStates,DFAStates);
+	Vertex *P = new Vertex;
+	P = DFATable->StartVertex;
+	for (j = 0; j <EdgeNumber; j++)
+		DFAStates[(j + 1)][0] = EdgeNum[j];
+	for (i = 1; i <= DFAStatesNumber; i++)
+	{
+		if (P->Out->Link == NULL)
+		{
+			for (j = 0; j < EdgeNumber; j++)
+			{
+				if (P->Out->Link->weight == EdgeNum[j])
+					break;
+			}
+			DFAStates[i][j] = P->Out->number;
+		}
+	}
+}
 //输入需要匹配的字符串
 void DFA::InputString()
 {
@@ -623,7 +654,7 @@ void DFA::InputString()
 //进行正则匹配
 void DFA::Match()
 {
-	int Position = 0, Sign =0;
+	int Position = 0, Sign = 0;
 	Matchout = Input;
 	Vertex *P = DFATable->StartVertex;
 	for (int i = 0; i < Input.length(); i++)
@@ -645,12 +676,12 @@ void DFA::Match()
 				{
 					for (int j = Sign; j <= i; j++)
 						Matchout[j] = Input[j];
-					Sign = i+1;
+					Sign = i + 1;
 				}
 			}
 			else
 			{
-				if (P==DFATable->StartVertex)
+				if (P == DFATable->StartVertex)
 				{
 					for (int j = Sign; j <= i; j++)
 						Matchout[j] = '#';
@@ -678,9 +709,9 @@ void DFA::Match()
 					P = P->Next;
 				if (DFAAcceptStates[Position] == Position)//如果是接受状态
 				{
-					for (int j =Sign; j <= i; j++)
+					for (int j = Sign; j <= i; j++)
 						Matchout[j] = Input[j];
-					Sign = i+1;
+					Sign = i + 1;
 				}
 				continue;
 			}
@@ -699,7 +730,7 @@ void DFA::Match()
 					{
 						for (int j = Sign; j <= i; j++)
 							Matchout[j] = Input[j];
-						Sign = i+1;
+						Sign = i + 1;
 					}
 					break;
 				}
@@ -709,7 +740,7 @@ void DFA::Match()
 			if (Plink == NULL)
 			{
 				P = DFATable->StartVertex;
-				for (int j = Sign; j < i;j++)
+				for (int j = Sign; j < i; j++)
 					Matchout[j] = '#';
 				Sign = i;
 				i--;
@@ -720,7 +751,7 @@ void DFA::Match()
 	for (int i = Sign; i < Input.length(); i++)
 		Matchout[i] = '#';
 	cout << "正则表达式：" << Regex << endl;
-	cout << "输入的字符串："   << Input << endl;
+	cout << "输入的字符串：" << Input << endl;
 	cout << "正则匹配的字串符" << Matchout << endl;
 	cout << endl;
 }

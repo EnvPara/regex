@@ -11,5 +11,5 @@ Vertex::Vertex(int num)
 {
 	number = num;
 	Next = NULL;
-	Out = NULL; 
+	Out = NULL;
 }
