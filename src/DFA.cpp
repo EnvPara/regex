@@ -148,7 +148,7 @@ DFA::~DFA()
 //ªÒ»°’˝‘Ú ‰»Î
 void DFA::InputRegex()
 {
-	cout << "µ⁄“ª≤Ω: «Î ‰»Î’˝‘Ú±Ì¥Ô Ω\n";
+	cout << "ø\n";
 	cin >> Regex;
 }
 //º”»Î"."¡¨Ω·µ„
@@ -175,9 +175,9 @@ void DFA::InsertNode()
 		i++;
 	}
 	cout << endl;
-	cout << "µ⁄∂˛≤Ω: º”»Î¡¨Ω·µ„∫Û\n";
+	cout << "øøøøøøøøøø\n";
 	cout << Regex << endl;
-	cout << "◊÷∑˚¥Æ≥§∂»£∫" << length << endl;
+	cout << "øøøøø" << length << endl;
 }
 //≈–∂œ‘ÀÀ„∑˚”≈œ»º∂
 int DFA::Precedence(char symbol)
@@ -245,9 +245,9 @@ void DFA::RegextoPost()
 	}
 	RegexPost[j] = '\0';
 	Value->Clear();
-	cout << "\nµ⁄»˝≤Ω: ◊™Œ™∫Û◊∫ Ω\n"
+	cout << "\nThird step:transform RegexPost\n"
 		<< RegexPost << "\n"
-		<< "◊÷∑˚¥Æ≥§∂»: " << strlen(RegexPost);
+		<< "String length:" << strlen(RegexPost);
 }
 //…®√ËƒÊ≤®¿º Ω÷–≥˝‘ÀÀ„∑˚“‘Õ‚µƒ◊÷∑˚µƒ ˝ƒø
 void DFA::GetEdgeNumber()
@@ -275,12 +275,12 @@ void DFA::GetEdgeNumber()
 	}
 	EdgeNum[EdgeNumber] = '\0';
 	cout << endl;
-	cout << "\nµ⁄Àƒ≤Ω£∫ªÒ»°◊÷∑˚ºØ\n";
+	cout << "\nFourth step:get char list\n";
 	for (i = 0; i<EdgeNumber; i++)
 	{
 		cout << EdgeNum[i] << ' ';
 	}
-	cout << "\n◊÷∑˚∏ˆ ˝: " << EdgeNumber << endl;
+	cout << "\nchar numbers: " << EdgeNumber << endl;
 	cout << "\n\n------------------------" << endl;
 }
 //”√Thompsonππ‘Ï∑®ππ‘ÏNFA
@@ -630,9 +630,9 @@ void DFA::Hopcroft()
 void DFA::InputString()
 {
 	cout << endl;
-	cout << "«Î ‰»Î–Ë“™∆•≈‰µƒ◊÷∑˚¥Æ" << endl;
+	cout << "Please input match string" << endl;
 	cin >> Input;
-	cout << " ‰»Îµƒ◊÷∑˚¥ÆŒ™:" << Input << endl;
+	cout << "match string:" << Input << endl;
 }
 //Ω¯––’˝‘Ú∆•≈‰
 void DFA::Match()
@@ -733,8 +733,8 @@ void DFA::Match()
 	}
 	for (int i = Sign; i < Input.length(); i++)
 		Matchout[i] = '#';
-	cout << "’˝‘Ú±Ì¥Ô Ω£∫" << Regex << endl;
-	cout << " ‰»Îµƒ◊÷∑˚¥Æ£∫" << Input << endl;
-	cout << "’˝‘Ú∆•≈‰µƒ◊÷¥Æ∑˚" << Matchout << endl;
-	cout << endl;
+	cout << "Regex expression:" << Regex << endl;
+	cout << "Input match string:" << Input << endl;
+	cout << "Matchout:" << Matchout << endl;
+	cout<<endl;
 }
