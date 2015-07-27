@@ -148,7 +148,7 @@ DFA::~DFA()
 //ªÒ»°’˝‘Ú ‰»Î
 void DFA::InputRegex()
 {
-	cout << "ø\n";
+	cout << "First step:please input regex expression:\n";
 	cin >> Regex;
 }
 //º”»Î"."¡¨Ω·µ„
@@ -175,9 +175,9 @@ void DFA::InsertNode()
 		i++;
 	}
 	cout << endl;
-	cout << "øøøøøøøøøø\n";
+	cout << "Regex expression:\n";
 	cout << Regex << endl;
-	cout << "øøøøø" << length << endl;
+	cout << "String length" << length << endl;
 }
 //≈–∂œ‘ÀÀ„∑˚”≈œ»º∂
 int DFA::Precedence(char symbol)
@@ -630,9 +630,9 @@ void DFA::Hopcroft()
 void DFA::InputString()
 {
 	cout << endl;
-	cout << "Please input match string" << endl;
+	cout << "Please input match string: " << endl;
 	cin >> Input;
-	cout << "match string:" << Input << endl;
+	cout << "Match string:         " << Input << endl;
 }
 //Ω¯––’˝‘Ú∆•≈‰
 void DFA::Match()
@@ -733,8 +733,8 @@ void DFA::Match()
 	}
 	for (int i = Sign; i < Input.length(); i++)
 		Matchout[i] = '#';
-	cout << "Regex expression:" << Regex << endl;
-	cout << "Input match string:" << Input << endl;
-	cout << "Matchout:" << Matchout << endl;
+	cout << "Regex expression:     " << Regex << endl;
+	cout << "Input match string:   " << Input << endl;
+	cout << "Matchout:             " << Matchout << endl;
 	cout<<endl;
 }
