@@ -1,14 +1,14 @@
 #include "Adj.h"
 #include <iostream>
 using namespace std;
-//¿¿¿¿
+
 AdjacentTable::AdjacentTable()
 {
 	numOfVertexs = 1;
 	numOfEdge = 0;
 	StartVertex = new Vertex();
 }
-//¿¿¿¿
+
 AdjacentTable::~AdjacentTable()
 {
 	Vertex *p;
@@ -26,7 +26,7 @@ AdjacentTable::~AdjacentTable()
 		p = p->Next;
 	}
 }
-//¿¿¿¿¿¿¿¿¿¿¿
+
 int AdjacentTable::GetValueByPos(int pos) const
 {
 	if ((pos >= 0) && (pos < numOfVertexs))
@@ -41,7 +41,7 @@ int AdjacentTable::GetValueByPos(int pos) const
 	else
 		return -1;
 }
-//¿¿¿¿¿¿¿¿¿¿¿¿
+
 int AdjacentTable::GetPosByValue(int value) const
 {
 	Vertex *p = StartVertex;
@@ -53,7 +53,7 @@ int AdjacentTable::GetPosByValue(int value) const
 	}
 	return -1;
 }
-//¿¿¿¿¿¿¿¿¿¿
+
 char AdjacentTable::GetWeightByPos(int v1, int v2) const
 {
 	if ((v1 >= 0) && (v2 >= 0) && (v1 < numOfVertexs) && (v2 < numOfVertexs))
@@ -73,12 +73,12 @@ char AdjacentTable::GetWeightByPos(int v1, int v2) const
 	}
 	return '#';
 }
-//¿¿¿¿¿¿¿¿¿
+
 char AdjacentTable::GetWeightByValue(int value1, int value2) const
 {
 	return GetWeightByPos(GetPosByValue(value1), GetPosByValue(value2));
 }
-//¿¿¿¿¿¿
+
 void AdjacentTable::SetValue(int value, int pos)
 {
 	if (pos < 0 || pos >= numOfVertexs)
@@ -93,7 +93,7 @@ void AdjacentTable::SetValue(int value, int pos)
 	}
 	p->number = value;
 }
-//¿¿¿¿
+
 void AdjacentTable::InsertVertex(int value)
 {
 	int pos = GetPosByValue(value);
@@ -109,7 +109,7 @@ void AdjacentTable::InsertVertex(int value)
 	p->Next = newVertex;
 	numOfVertexs++;
 }
-//¿¿¿¿¿¿¿¿¿
+
 void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 {
 	if ((v1 < 0) || (v1 >= numOfVertexs) || (v2 < 0) || (v2 >= numOfVertexs))
@@ -145,13 +145,13 @@ void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 		numOfEdge++;
 	}
 }
-//¿¿¿¿¿¿¿¿
+
 void AdjacentTable::InsertEdgeByValue(int value1, int value2, char weight)
 {
 	int v1 = GetPosByValue(value1), v2 = GetPosByValue(value2);
 	InsertEdgeByPos(v1, v2, weight);
 }
-//¿¿¿¿¿¿¿
+
 void AdjacentTable::RemoveAllEdges(void)
 {
 	Vertex *p = StartVertex;
@@ -170,7 +170,7 @@ void AdjacentTable::RemoveAllEdges(void)
 	}
 	numOfEdge = 0;
 }
-//¿¿¿¿¿
+
 void AdjacentTable::Clear(void)
 {
 	RemoveAllEdges();
