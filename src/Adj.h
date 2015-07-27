@@ -1,7 +1,6 @@
 #ifndef _ADJ_H_
 #define _ADJ_H_
 #include "Vertex.h"
-//用领接表定义的图类
 class AdjacentTable
 {
 public:

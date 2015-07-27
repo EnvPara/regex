@@ -1,14 +1,14 @@
 #include "Adj.h"
 #include <iostream>
 using namespace std;
-//¹¹Ôìº¯Êý
+//¿¿¿¿
 AdjacentTable::AdjacentTable()
 {
 	numOfVertexs = 1;
 	numOfEdge = 0;
 	StartVertex = new Vertex();
 }
-//Îö¹¹º¯Êý
+//¿¿¿¿
 AdjacentTable::~AdjacentTable()
 {
 	Vertex *p;
@@ -26,7 +26,7 @@ AdjacentTable::~AdjacentTable()
 		p = p->Next;
 	}
 }
-//°´¶¥µãÎ»ÖÃ»ñÈ¡¶¥µãµÄÖµ
+//¿¿¿¿¿¿¿¿¿¿¿
 int AdjacentTable::GetValueByPos(int pos) const
 {
 	if ((pos >= 0) && (pos < numOfVertexs))
@@ -41,7 +41,7 @@ int AdjacentTable::GetValueByPos(int pos) const
 	else
 		return -1;
 }
-//°´¶¥µãµÄÖµ»ñÈ¡¶¥µãµÄÎ»ÖÃ
+//¿¿¿¿¿¿¿¿¿¿¿¿
 int AdjacentTable::GetPosByValue(int value) const
 {
 	Vertex *p = StartVertex;
@@ -53,7 +53,7 @@ int AdjacentTable::GetPosByValue(int value) const
 	}
 	return -1;
 }
-//°´¶¥µãÎ»ÖÃ»ñÈ¡±ßµÄÈ¨
+//¿¿¿¿¿¿¿¿¿¿
 char AdjacentTable::GetWeightByPos(int v1, int v2) const
 {
 	if ((v1 >= 0) && (v2 >= 0) && (v1 < numOfVertexs) && (v2 < numOfVertexs))
@@ -73,12 +73,12 @@ char AdjacentTable::GetWeightByPos(int v1, int v2) const
 	}
 	return '#';
 }
-//°´¶¥µãÖµ»ñÈ¡±ßµÄÈ¨
+//¿¿¿¿¿¿¿¿¿
 char AdjacentTable::GetWeightByValue(int value1, int value2) const
 {
 	return GetWeightByPos(GetPosByValue(value1), GetPosByValue(value2));
 }
-//ÉèÖÃ¶¥µãµÄÖµ
+//¿¿¿¿¿¿
 void AdjacentTable::SetValue(int value, int pos)
 {
 	if (pos < 0 || pos >= numOfVertexs)
@@ -93,7 +93,7 @@ void AdjacentTable::SetValue(int value, int pos)
 	}
 	p->number = value;
 }
-//²åÈë¶¥µã
+//¿¿¿¿
 void AdjacentTable::InsertVertex(int value)
 {
 	int pos = GetPosByValue(value);
@@ -109,7 +109,7 @@ void AdjacentTable::InsertVertex(int value)
 	p->Next = newVertex;
 	numOfVertexs++;
 }
-//°´¶¥µãÎ»ÖÃ²åÈë±ß±í
+//¿¿¿¿¿¿¿¿¿
 void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 {
 	if ((v1 < 0) || (v1 >= numOfVertexs) || (v2 < 0) || (v2 >= numOfVertexs))
@@ -145,13 +145,13 @@ void AdjacentTable::InsertEdgeByPos(int v1, int v2, char weight)
 		numOfEdge++;
 	}
 }
-// °´¶¥µãÖµ²åÈë±ß±í
+//¿¿¿¿¿¿¿¿
 void AdjacentTable::InsertEdgeByValue(int value1, int value2, char weight)
 {
 	int v1 = GetPosByValue(value1), v2 = GetPosByValue(value2);
 	InsertEdgeByPos(v1, v2, weight);
 }
-// É¾³ýËùÓÐµÄ±ß±í
+//¿¿¿¿¿¿¿
 void AdjacentTable::RemoveAllEdges(void)
 {
 	Vertex *p = StartVertex;
@@ -170,7 +170,7 @@ void AdjacentTable::RemoveAllEdges(void)
 	}
 	numOfEdge = 0;
 }
-// Çå¿ÕÁÚ½Ó±í
+//¿¿¿¿¿
 void AdjacentTable::Clear(void)
 {
 	RemoveAllEdges();
