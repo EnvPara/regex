@@ -1,5 +1,5 @@
 # Lregex:
-            --A simple regex engine
+            --一个简易的正则表达式引擎
 <h2>Building and running</h2>
 <h4>Linux, *nix, Mac OSX:<h4>
 
