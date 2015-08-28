@@ -9,7 +9,7 @@
             
         Ps: windows  vs2013
             如果出现问题错误：stack around the variable “XX” was corrupted.
-            把“project->配置属性->c/c++->代码生成->基本运行时检查 设置为默认值，
+            把“project->配置属性->c/c++->代码生成->基本运行时检查 设置为默认,
             就没有这样的错误了。
 <h2>Process:</h2>
         Re->NFA->DFA
