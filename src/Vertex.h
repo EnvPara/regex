@@ -1,5 +1,5 @@
-#ifndef _VERTEX_H
-#define _VERTEX_H
+#ifndef VERTEX_H_
+#define VERTEX_H_
 #include "Edge.h"
 
 class Vertex
