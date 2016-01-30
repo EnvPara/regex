@@ -1,5 +1,5 @@
-#ifndef _ADJ_H_
-#define _ADJ_H_
+#ifndef ADJ_H_
+#define ADJ_H_
 #include "Vertex.h"
 class AdjacentTable
 {
