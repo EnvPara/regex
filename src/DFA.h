@@ -1,5 +1,5 @@
-#ifndef _DFA_H
-#define _DFA_H
+#ifndef DFA_H_
+#define DFA_H_
 #include <string>
 #include "Adj.h"
 using namespace std;
