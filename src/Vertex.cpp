@@ -1,15 +1,12 @@
-#include "Vertex.h"
+//
+//  vertex.cpp
+//  regex
+//
+//  Created by leviathan on 16/7/19.
+//  Copyright © 2016年 leviathan. All rights reserved.
+//
+
 #include <iostream>
-using namespace std;
-Vertex::Vertex()
-{
-	number = -1;
-	Next = NULL;
-	Out = NULL;
-}
-Vertex::Vertex(int num)
-{
-	number = num;
-	Next = NULL;
-	Out = NULL;
-}
+
+#include "vertex.hpp"
+

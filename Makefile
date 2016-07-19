@@ -1,16 +1,16 @@
 Lregex:Main.o	Adj.o	DFA.o	Edge.o	Vertex.o
 	g++ -g Main.o	Adj.o	DFA.o	Edge.o	Vertex.o -o Lregex
-Main.o:src/Main.cpp	src/DFA.h src/Adj.h
-	g++ -g -c src/Main.cpp
-Adj.o:src/Adj.cpp src/Adj.h src/Vertex.h
-	g++ -g -c src/Adj.cpp
-DFA.o:src/DFA.cpp src/DFA.h src/Edge.h src/Vertex.h src/Adj.h
-	g++ -g -c src/DFA.cpp
-Edge.o:src/Edge.cpp src/Edge.h
-	g++ -g -c src/Edge.cpp
-Vertex.o:src/Vertex.cpp src/Vertex.h src/Edge.h
-	g++ -g -c src/Vertex.cpp
+Main.o:src/main.cpp	src/dfa.hpp src/adj.hpp
+	g++ -std=c++11 -g -c src/main.cpp
+Adj.o:src/adj.cpp src/adj.hpp src/vertex.hpp
+	g++ -std=c++11 -g -c src/adj.cpp
+DFA.o:src/dfa.cpp src/dfa.hpp src/edge.hpp src/vertex.hpp src/adj.hpp
+	g++ -std=c++11 -g -c src/dfa.cpp
+Edge.o:src/edge.cpp src/edge.hpp
+	g++ -std=c++11 -g -c src/edge.cpp
+Vertex.o:src/vertex.cpp src/vertex.hpp src/edge.hpp
+	g++ -std=c++11 -g -c src/vertex.cpp
 clean:
-	rm -f Main.o Adj.o DFA.o Edge.o	Vertex.o Lregex
+	rm -f *.o Lregex
 
 

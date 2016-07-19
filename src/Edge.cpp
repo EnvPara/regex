@@ -1,17 +1,12 @@
-#include "Edge.h"
-#include <iostream>
-using namespace std;
+//
+//  edge.cpp
+//  regex
+//
+//  Created by leviathan on 16/7/19.
+//  Copyright © 2016年 leviathan. All rights reserved.
+//
 
-Edge::Edge()
-{
-	number = -1;
-	position = -1;
-	Link = NULL;
-}
-Edge::Edge(int num, int pos, char ch)
-{
-	number = num;
-	position = pos;
-	weight = ch;
-	Link = NULL;
-}
+#include <iostream>
+
+#include "edge.hpp"
+
