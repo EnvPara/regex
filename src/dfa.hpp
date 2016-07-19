@@ -9,7 +9,7 @@
 #ifndef DFA_H_
 #define DFA_H_
 
-#include <string>
+#include <string.h>
 #include "adj.hpp"
 
 using namespace std;
@@ -81,7 +81,7 @@ private:
     int dfaStatesNumber;
 
     int edgeNumber_;
-    
+
     char * edgeNum_;
     string input_;
     string matchOut_;
