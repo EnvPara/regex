@@ -29,10 +29,10 @@ public:
     int* Closure(int *T);
     int* Move(int *T, char ch);
     void OutputNFA(void);
-    
+
     int GetNumOfVertexs(){return numOfVertexs_;}
     int GetNumOfEdge(){return numOfEdge_;}
-    
+
     Vertex * GetStartVertex(){return startVertex_;}
     void SetStartVertex(Vertex *start){startVertex_=start;}
 private:

@@ -23,11 +23,11 @@ AdjacentTable::~AdjacentTable()
             delete q;
             q = p->GetOutPtr();
         }
+        Vertex * sp=p;
         p = p->GetNextPtr();
+        delete sp;
     }
-    delete startVertex_;
 }
-
 int AdjacentTable::GetValueByPos(int pos) const
 {
     if ((pos >= 0) && (pos < numOfVertexs_))
